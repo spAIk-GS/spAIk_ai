@@ -3,11 +3,20 @@ import time
 import json
 import tempfile
 import math
+import numpy as np
 
-# Import modules for audio extraction and analysis
 from audio_feedback.extract_audio import extract_audio_from_video
-from audio_feedback.analyze_audio import analyze_audio_features
+from audio_feedback.analyze_audio import analyze_audio_features , analyze_audio_segment
 from audio_feedback.stuttering_detector import detect_stuttering
+from audio_feedback.feedback_generator import generate_audio_feedback
+from audio_feedback.volume_detector import detect_volume_anomalies_by_sentence
+from audio_feedback.utils import (
+    
+    convert_rms_to_db,
+    get_stutter_words_at_timestamp,
+    find_full_sentence,
+    get_sentence_timestamps
+)
 
 # Import the updated audio feedback generator.
 # It is assumed that generate_audio_feedback now takes `features` and `avg_rms_db` as arguments.
@@ -15,107 +24,145 @@ from audio_feedback.feedback_generator import generate_audio_feedback
 
 # === JSON file saving related functions ===
 
-def save_feedback_to_json(feedback_data: dict, filename: str):
-    """
-    Saves the given dictionary feedback data to a JSON file.
-
-    Args:
-        feedback_data (dict): The feedback data dictionary to save.
-        filename (str): The name of the JSON file to save (including extension).
-    """
-    # Create the output directory if it doesn't exist
-    output_dir = "analysis_results"
-    os.makedirs(output_dir, exist_ok=True)
-    
-    file_path = os.path.join(output_dir, filename)
-    
-    try:
-        with open(file_path, 'w', encoding='utf-8') as f:
-            json.dump(feedback_data, f, ensure_ascii=False, indent=4)
-        print(f"피드백이 성공적으로 '{file_path}'에 저장되었습니다.")
-    except IOError as e:
-        print(f"파일 저장 중 오류가 발생했습니다: {e}")
-
-def convert_rms_to_db(rms_value):
-    """
-    Converts RMS value to decibels (dB).
-    Handles log errors by treating RMS values of 0 or less as a very small value.
-    """
-    if rms_value <= 0:
-        return -120.0  # A very low value close to silence
-    return 20 * math.log10(rms_value)
 
 def amain(video_path, analysis_id, presentation_id):
 
     # Temporary path where the extracted audio file will be saved
     with tempfile.TemporaryDirectory(prefix=f"audio_{analysis_id}_") as tmpdir:
         # === Audio extraction ===
-        print("=== 1. 오디오 추출 중 ===")
         audio_path = os.path.join(tmpdir, f"{presentation_id}.wav")
+        start_time = time.time()
+        print("=== 1. 오디오 추출 중 ===")
         start = time.time()
-        # 2) 비디오 → 오디오 추출 (임시파일에 저장)
-        print("--추출 시작--")
         extract_audio_from_video(video_path, audio_path)
         end = time.time()
         print(f"[✓] 소요 시간: {end - start:.2f}초")
 
-        # 3) 오디오 분석
+        print("=== 2. 오디오 분석 중 (전체) ===")
+        start = time.time()
         features = analyze_audio_features(audio_path)
-        transcript = features.get("transcript", "")
-        
-        # 4) Stuttering analysis and feedback generation ===
-        print("=== 3. 말 더듬음 분석 중 ===")
-        stuttering_analysis_results = detect_stuttering(audio_path)
+        end = time.time()
+        print(f"[✓] 소요 시간: {end - start:.2f}초")
     
-        # === 5. Audio feedback generation ( 종합 ) ===
-        print("=== 4. 오디오 피드백 생성 중 ===")
+        total_duration = features['duration_sec']
+        avg_rms = features['avg_rms']
+        avg_rms_db = convert_rms_to_db(avg_rms)
+
+         # 45초 단위 분석 결과를 저장할 리스트를 분리
+        speed_segments = []
+        pitch_segments = []
+        segment_duration = 45 # 45초 단위로 변경
     
-        # avg_rms_db를 먼저 계산합니다.
-        avg_rms_value = features.get('avg_rms')
-        avg_rms_db = 'N/A'
-        if avg_rms_value is not None:
-            try:
-                # numpy.float32 타입을 포함한 모든 숫자 타입을 float로 변환합니다.
-                avg_rms_float = float(avg_rms_value)
-                if avg_rms_float > 0.0:
-                   avg_rms_db = convert_rms_to_db(avg_rms_float)
-                else:
-                   avg_rms_db = -120.0 # 0 이하의 값은 침묵에 가까운 낮은 값으로 설정
-            except (ValueError, TypeError):
-                # 변환 실패 시 N/A로 처리
-                print("경고: 'avg_rms' 값을 float로 변환하는 데 실패했습니다. 'N/A'로 설정합니다.")
-                avg_rms_db = 'N/A'
-    
-        # 수정된 generate_audio_feedback 함수를 호출하고, 점수와 피드백을 한 번에 받습니다.
+        print("=== 3. 오디오 분석 중 (45초 구간별) ===")
+        start = time.time()
+        # 45초 간격으로 반복
+        for i in range(0, int(total_duration), segment_duration):
+            segment_start = i
+            segment_end = min(i + segment_duration, total_duration)
+            if segment_end - segment_start > 0:
+                segment_analysis = analyze_audio_segment(
+                    audio_path,
+                    segment_start,
+                    segment_end,
+                    features['word_timestamps']
+                )
+            # 말속도 세그먼트 데이터 저장
+            speed_segments.append({
+                "start_time_sec": round(float(segment_analysis.get("start_time_sec", 0)), 2),
+                "end_time_sec": round(float(segment_analysis.get("end_time_sec", 0)), 2),
+                "value": round(float(segment_analysis.get("speaking_rate_wpm", 0)), 2)
+            })
+            # 피치 세그먼트 데이터 저장
+            pitch_segments.append({
+                "start_time_sec": round(float(segment_analysis.get("start_time_sec", 0)), 2),
+                "end_time_sec": round(float(segment_analysis.get("end_time_sec", 0)), 2),
+                "value": round(float(segment_analysis.get("avg_pitch_hz", 0)), 2)
+            })
+        end = time.time()
+        print(f"[✓] 소요 시간: {end - start:.2f}초")
+
+        print("=== 4. 말더듬 감지 중 ===")
+        start = time.time()
+        stutter_results = detect_stuttering(audio_path)
+        end = time.time()
+        print(f"[✓] 소요 시간: {end - start:.2f}초")
+
+        print("=== 5. 피드백 생성 중 ===")
         audio_feedback_results = generate_audio_feedback(features, avg_rms_db)
+    
+        volume_anomalies = detect_volume_anomalies_by_sentence(
+            features['rms_frames'], 
+            avg_rms_db, 
+            sr=16000, 
+            hop_length=512, 
+            word_timestamps=features['word_timestamps']
+        )
+    
+        sentences_with_timestamps = get_sentence_timestamps(features['word_timestamps'])
+    
+        stutter_count = stutter_results['stutter_count']
+        stuttering_timestamps = stutter_results['stuttering_timestamps']
+        stutter_feedback = stutter_results['stuttering_feedback']
+    
+        stutter_by_sentence = {}
+        for timestamp in stuttering_timestamps:
+            stutter_words = get_stutter_words_at_timestamp(timestamp, features['word_timestamps'])
         
-        # === 7. Final feedback generation ===
-        print("\n========== 최종 피드백을 생성 중 ==========")
+            full_sentence = ""
+            for sentence in sentences_with_timestamps:
+                if timestamp['start'] >= sentence['start'] and timestamp['end'] <= sentence['end']:
+                    full_sentence = sentence['text']
+                    break
+        
+            if not full_sentence:
+                full_sentence = find_full_sentence(stutter_words, features['transcript'])
+
+            if full_sentence not in stutter_by_sentence:
+                stutter_by_sentence[full_sentence] = {
+                    "timestamps": [],
+                    "stutter_words": []
+                }
+        
+            stutter_by_sentence[full_sentence]["timestamps"].append(
+                f"{timestamp['start']:.2f}s - {timestamp['end']:.2f}s"
+            )
+            stutter_by_sentence[full_sentence]["stutter_words"].append(stutter_words)
     
-        # 말더듬음 피드백을 가져옵니다.
-        stutter_count = stuttering_analysis_results.get('stutter_count', 0)
-        stutter_feedback = stuttering_analysis_results.get('stuttering_feedback', 'N/A')
+        stutter_details = []
+        for sentence, details in stutter_by_sentence.items():
+            stutter_details.append({
+                "sentence": sentence,
+                "timestamps": details["timestamps"],
+                "stutter_words": details["stutter_words"]
+            })
     
-        # 모든 피드백 결과를 이미지에 제시된 구조로 통합하고 ID를 추가합니다.
-        # 점수 항목을 모두 삭제합니다.
         final_feedback_report = {
-            "speed": {
-                "feedback": audio_feedback_results.get("speed_feedback", ""),
-                "value": round(float(audio_feedback_results.get("speaking_rate_wpm", 0.0)), 2)
-            },                "pitch": {
-                  "feedback": audio_feedback_results.get("pitch_feedback", ""),
-                "value": round(float(audio_feedback_results.get("avg_pitch_hz", 0.0)), 2)
-            },
-            "volume": {
-                "feedback": audio_feedback_results.get("volume_feedback", ""),
-                "decibels": round(float(audio_feedback_results.get("avg_rms_db", 0.0)), 2)
-            },
-            "stutter": {
-                "feedback": stutter_feedback,
-                "stutter_count": stutter_count
-            },
-           
+                "speed": {
+                    "feedback": audio_feedback_results.get("speed_feedback", ""),
+                    "value": round(float(audio_feedback_results.get("speaking_rate_wpm", 0.0)), 2),
+                    "level": audio_feedback_results.get("speed_level", ""),
+                    "segments": speed_segments
+                },
+                "pitch": {
+                    "feedback": audio_feedback_results.get("pitch_feedback", ""),
+                    "value": round(float(audio_feedback_results.get("avg_pitch_hz", 0.0)), 2),
+                    "level": audio_feedback_results.get("pitch_level", ""),
+                    "segments": pitch_segments
+                },
+                "volume": {
+                    "feedback": audio_feedback_results.get("volume_feedback", ""),
+                    "decibels": round(float(avg_rms_db), 2),
+                    "level": audio_feedback_results.get("volume_level", ""),
+                    "volume_anomalies": volume_anomalies
+                },
+                "stutter": {
+                    "feedback": stutter_feedback,
+                    "stutter_count": stutter_count,
+                    "stutter_details": stutter_details
+                }
+        
         }
+
         print(final_feedback_report)
         return final_feedback_report
     
@@ -123,5 +170,6 @@ def amain(video_path, analysis_id, presentation_id):
 # Call the main function when the script is executed directly
 if __name__ == "__main__":
     start_total = time.time()
-    amain()
+    input_video_path = "C:/Users/SUNWOO/Desktop/spAIk_audio_ai-main/sample_input/mi3nu.mp4"
+    amain(input_video_path, "1234", "12345")
     print(f"\n총 소요 시간: {time.time() - start_total:.2f}초")
