@@ -30,7 +30,7 @@ def notify_status(callback_url, payload, retries=1):
     delay = 1.0
     for attempt in range(1, retries + 1):
         try:
-            res = requests.post(callback_url, json=payload, timeout=10)
+            res = requests.post(callback_url, json=payload, timeout=60)
             print(f"[POST] {callback_url} -> {res.status_code}")
             if 200 <= res.status_code < 300:
                 return True
