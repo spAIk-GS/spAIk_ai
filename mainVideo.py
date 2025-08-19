@@ -260,12 +260,12 @@ def run(video_path):
 
         report = {
             "body_movement": {
-            "level": gesture_level,
+            "emotion": gesture_level,
             "value": round(arm_move_ratio, 3),
             "segments": body_segments
             },
             "gaze": {
-                "level": gaze_level,
+                "emotion": gaze_level,
                 "value": 1 - round(head_down_ratio, 3),
                 "segments": gaze_segments
             }
