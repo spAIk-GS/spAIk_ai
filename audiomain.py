@@ -140,19 +140,19 @@ def amain(video_path, analysis_id, presentation_id):
                 "speed": {
                     "feedback": audio_feedback_results.get("speed_feedback", ""),
                     "value": round(float(audio_feedback_results.get("speaking_rate_wpm", 0.0)), 2),
-                    "level": audio_feedback_results.get("speed_level", ""),
+                    "emotion": audio_feedback_results.get("speed_level", ""),
                     "segments": speed_segments
                 },
                 "pitch": {
                     "feedback": audio_feedback_results.get("pitch_feedback", ""),
                     "value": round(float(audio_feedback_results.get("avg_pitch_hz", 0.0)), 2),
-                    "level": audio_feedback_results.get("pitch_level", ""),
+                    "emotion": audio_feedback_results.get("pitch_level", ""),
                     "segments": pitch_segments
                 },
                 "volume": {
                     "feedback": audio_feedback_results.get("volume_feedback", ""),
                     "decibels": round(float(avg_rms_db), 2),
-                    "level": audio_feedback_results.get("volume_level", ""),
+                    "emotion": audio_feedback_results.get("volume_level", ""),
                     "volume_anomalies": volume_anomalies
                 },
                 "stutter": {
