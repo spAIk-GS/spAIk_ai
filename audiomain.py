@@ -102,7 +102,6 @@ def amain(video_path, analysis_id, presentation_id):
     
         stutter_count = stutter_results['stutter_count']
         stuttering_timestamps = stutter_results['stuttering_timestamps']
-        stutter_feedback = stutter_results['stuttering_feedback']
     
         stutter_by_sentence = {}
         for timestamp in stuttering_timestamps:
