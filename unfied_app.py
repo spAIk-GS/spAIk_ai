@@ -7,6 +7,7 @@ import threading
 import time
 from tqdm import tqdm
 import tempfile
+import json
 
 # 분석 모듈
 import mainVideo
