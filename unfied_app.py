@@ -26,7 +26,7 @@ def get_status(analysis_id):
     with status_lock:
         return analysis_status_map.get(analysis_id)
 
-def notify_status(callback_url, payload, retries=3):
+def notify_status(callback_url, payload, retries=1):
     delay = 1.0
     for attempt in range(1, retries + 1):
         try:
