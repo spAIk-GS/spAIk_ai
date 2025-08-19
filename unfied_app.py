@@ -91,7 +91,7 @@ def process_analysis(s3_url: str, presentation_id: str, callback_url: str):
     set_status(video_analysis_id, "IN_PROGRESS")
     set_status(audio_analysis_id, "IN_PROGRESS")
 
-    video_result, audio_result = None, None
+    video_results, audio_results = None, None
     video_err, audio_err = None, None
 
     with tempfile.TemporaryDirectory(prefix="dl_") as tmpdir:
@@ -117,14 +117,14 @@ def process_analysis(s3_url: str, presentation_id: str, callback_url: str):
             return False
 
         try:
-            video_result = mainVideo.run(video_path)
+            video_results = mainVideo.run(video_path)
             set_status(video_analysis_id, "COMPLETED")
         except Exception as e:
             video_err = str(e)
             set_status(video_analysis_id, "FAILED")
 
         try:
-            audio_result = audiomain.amain(video_path, audio_analysis_id, presentation_id)
+            audio_results = audiomain.amain(video_path, audio_analysis_id, presentation_id)
             set_status(audio_analysis_id, "COMPLETED")
         except Exception as e:
             audio_err = str(e)
@@ -136,13 +136,13 @@ def process_analysis(s3_url: str, presentation_id: str, callback_url: str):
             "analysisId": video_analysis_id,
             "status": "FAILED" if video_err else "COMPLETED",
             **({"message": video_err} if video_err else {}),
-            **({"result": video_result} if (video_err is None and isinstance(video_result, dict)) else {})
+            **({"results": video_results} if (video_err is None and isinstance(video_results, dict)) else {})
         },
         "audio": {
             "analysisId": audio_analysis_id,
             "status": "FAILED" if audio_err else "COMPLETED",
             **({"message": audio_err} if audio_err else {}),
-            **({"result": audio_result} if (audio_err is None and isinstance(audio_result, dict)) else {})
+            **({"results": audio_results} if (audio_err is None and isinstance(audio_results, dict)) else {})
         }
     }
     notify_status(callback_url, payload)
