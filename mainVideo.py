@@ -43,12 +43,12 @@ def make_segments(timeline, segment_len_sec, total_duration_sec):
             body_segments.append({
                 "start_time_sec": float(start),
                 "end_time_sec": float(end),
-                "movement_percent": round(arm_avg, 3)
+                "movement_percent": round(arm_avg, 2)
             })
             gaze_segments.append({
                 "start_time_sec": float(start),
                 "end_time_sec": float(end),
-                "focus_level": 1 - round(gaze_avg, 3)
+                "focus_level": round(1 - gaze_avg, 2)
             })
         start = end
     return body_segments, gaze_segments
@@ -217,9 +217,9 @@ def run(video_path):
                 "second": int(sec),
                 "samples": int(b["samples"]),
                 "faceFrames": int(b["face_frames"]),
-                "gazeDownRatio": 1 - round(float(gaze_down_ratio), 3),
-                "armMoveRatio": round(float(arm_ratio), 3),
-                "avgPitchDeg": (round(float(avg_pitch), 3) if avg_pitch is not None else None)
+                "gazeDownRatio": round(1 - float(gaze_down_ratio), 2),
+                "armMoveRatio": round(float(arm_ratio), 2),
+                "avgPitchDeg": (round(float(avg_pitch), 2) if avg_pitch is not None else None)
             })
         
         SEGMENT_LEN = 45  # 초 단위 구간 길이
@@ -238,22 +238,22 @@ def run(video_path):
                 arm_vals = [t["armMoveRatio"] for t in seg_items if t["armMoveRatio"] is not None]
                 arm_avg = float(np.mean(arm_vals)) if arm_vals else 0.0
                 body_segments.append({
-                    "start_time_sec": float(start),
-                    "end_time_sec": float(end),
-                    "movement_percent": round(arm_avg, 3)
+                    "start_time_sec": round(float(start), 2),
+                    "end_time_sec": round(float(end), 2),
+                    "movement_percent": round(arm_avg, 2)
                 })
 
                 # gaze(gazeDownRatio 평균)
                 gaze_vals = [t["gazeDownRatio"] for t in seg_items if t["gazeDownRatio"] is not None]
                 gaze_avg = float(np.mean(gaze_vals)) if gaze_vals else 0.0
                 gaze_segments.append({
-                    "start_time_sec": float(start),
-                    "end_time_sec": float(end),
-                    "focus_level": 1 - round(gaze_avg, 3)
+                    "start_time_sec": round(float(start), 2),
+                    "end_time_sec": round(float(end), 2),
+                    "focus_level": round(1 - gaze_avg, 2)
                 })
 
         total_duration_sec = infer_total_duration_sec(cap, total_frames, fps, timeline)
-        body_segments, gaze_segments = make_segments(timeline, SEGMENT_LEN, total_duration_sec)
+        body_segments, gaze_segments = make_segments(timeline, SEGMENT_LEN, round(total_duration_sec, 1))
 
         from videoFG import generate_posture_feedback
         gaze_level, gesture_level = generate_posture_feedback(head_down_ratio, arm_move_ratio)
@@ -261,12 +261,12 @@ def run(video_path):
         report = {
             "movement": {
             "emotion": gesture_level,
-            "movement_percent": round(arm_move_ratio, 3),
+            "movement_percent": round(arm_move_ratio, 2),
             "segments": body_segments
             },
             "gaze": {
                 "emotion": gaze_level,
-                "focus_level": 1 - round(head_down_ratio, 3),
+                "focus_level": round(1 - head_down_ratio, 2),
                 "segments": gaze_segments
             }
             }
@@ -286,5 +286,5 @@ if __name__ == "__main__":
         data = run(video_path)
         json.dump(data, f, ensure_ascii=False, indent=4)
 
-        print("data2.json 저장 완료!")
+        print("data.json 저장 완료!")
     print("비디오 분석이 완료되었습니다.")
