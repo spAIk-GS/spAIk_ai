@@ -261,7 +261,7 @@ def run(video_path):
         report = {
             "movement": {
             "emotion": gesture_level,
-            "movement_percent ": round(arm_move_ratio, 3),
+            "movement_percent": round(arm_move_ratio, 3),
             "segments": body_segments
             },
             "gaze": {
