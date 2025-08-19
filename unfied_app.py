@@ -146,7 +146,7 @@ def process_analysis(s3_url: str, presentation_id: str, callback_url: str):
         }
     }
     print('==========================================\n최종')
-    print(payload)
+    print(json.dumps(payload, indent=2, ensure_ascii=False))
     notify_status(callback_url, payload)
     return True
 
