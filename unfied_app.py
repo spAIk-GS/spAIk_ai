@@ -145,6 +145,8 @@ def process_analysis(s3_url: str, presentation_id: str, callback_url: str):
             **({"results": audio_results} if (audio_err is None and isinstance(audio_results, dict)) else {})
         }
     }
+    print('==========================================\n최종')
+    print(payload)
     notify_status(callback_url, payload)
     return True
 
