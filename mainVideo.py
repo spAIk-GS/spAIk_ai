@@ -43,12 +43,12 @@ def make_segments(timeline, segment_len_sec, total_duration_sec):
             body_segments.append({
                 "start_time_sec": float(start),
                 "end_time_sec": float(end),
-                "value": round(arm_avg, 3)
+                "movement_percent": round(arm_avg, 3)
             })
             gaze_segments.append({
                 "start_time_sec": float(start),
                 "end_time_sec": float(end),
-                "value": 1 - round(gaze_avg, 3)
+                "focus_level": 1 - round(gaze_avg, 3)
             })
         start = end
     return body_segments, gaze_segments
@@ -240,7 +240,7 @@ def run(video_path):
                 body_segments.append({
                     "start_time_sec": float(start),
                     "end_time_sec": float(end),
-                    "value": round(arm_avg, 3)
+                    "movement_percent": round(arm_avg, 3)
                 })
 
                 # gaze(gazeDownRatio 평균)
@@ -249,7 +249,7 @@ def run(video_path):
                 gaze_segments.append({
                     "start_time_sec": float(start),
                     "end_time_sec": float(end),
-                    "value": 1 - round(gaze_avg, 3)
+                    "focus_level": 1 - round(gaze_avg, 3)
                 })
 
         total_duration_sec = infer_total_duration_sec(cap, total_frames, fps, timeline)
