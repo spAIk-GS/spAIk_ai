@@ -259,14 +259,14 @@ def run(video_path):
         gaze_level, gesture_level = generate_posture_feedback(head_down_ratio, arm_move_ratio)
 
         report = {
-            "body_movement": {
+            "movement": {
             "emotion": gesture_level,
-            "value": round(arm_move_ratio, 3),
+            "movement_percent ": round(arm_move_ratio, 3),
             "segments": body_segments
             },
             "gaze": {
                 "emotion": gaze_level,
-                "value": 1 - round(head_down_ratio, 3),
+                "focus_level": 1 - round(head_down_ratio, 3),
                 "segments": gaze_segments
             }
             }
