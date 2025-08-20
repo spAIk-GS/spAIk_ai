@@ -36,7 +36,16 @@ spAIk_ai/
 │   ├── stuttering_detector.py  # 말더듬 감지
 │   ├── utils.py                # 공통 유틸리티 함수 모음
 │   └── volume_detector.py      # 음량 이상 감지
-└── main.py                     # 메인 실행 파일
+│
+├── video_feedback/
+│   ├── face_detection.py       # 얼굴 감지
+│   ├── mark_detection.py       # 얼굴 랜드마크 감지
+│   ├── pose_estimation.py      # 머리 자세 추정
+│   ├── videoFG.py              # 공통 유틸리티 함수 모음
+│
+' ' ' ' ' '
+' ' ' ' ' '
+└── unfied_app.py                     # 메인 실행 파일
 ```
 ### ⚙️ 설치 및 실행 방법
 
@@ -65,8 +74,8 @@ pip install -r requirements.txt
 
 
 ##### 실행
- main.py 파일을 실행하여 분석을 시작합니다. 주의: main.py 파일의 input_video_path 변수 값을 분석할 영상 파일 경로로 변경해야 합니다.
+ unfied_app.py 파일을 실행하여 분석을 시작합니다. 주의: main.py 파일의 input_video_path 변수 값을 분석할 영상 파일 경로로 변경해야 합니다.
 ```
-python main.py
+python unfied_app.py
 ```
 
