@@ -16,13 +16,14 @@ spAIk는 사용자가 업로드한 영상 파일을 분석하여, 발표 및 면
 
 데이터 출력:분석 결과는 JSON 형식으로 구조화되어 저장되며, 음성 및 영상 피드백을 구분하여 제공합니다.
 
+
 🛠️ 기술 스택
 언어: Python 3.11
 
 주요 라이브러리: librosa, ffmpeg, whisper, numpy, mediapipe, opencv-python, onnxruntime
 
-
 환경: dotenv (환경 변수 관리)
+
 
 📁 프로젝트 구조
 ```
