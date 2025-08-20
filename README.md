@@ -55,9 +55,7 @@ cd spAIk_ai
 가상 환경을 생성하고 활성화합니다.
 
 python -m venv venv
-# Windows
 venv\Scripts\activate
-# macOS/Linux
 source venv/bin/activate
 
 필요한 라이브러리를 설치합니다.
