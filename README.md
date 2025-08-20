@@ -27,6 +27,7 @@ STT (Speech-to-Text): Whisper를 활용해 음성을 텍스트로 변환합니�
 환경: dotenv (환경 변수 관리)
 
 📁 프로젝트 구조
+```
 spAIk_ai/
 ├── audio_feedback/
 │   ├── ai_feedback.py          # Gemini API를 활용한 텍스트 피드백 생성
@@ -39,7 +40,7 @@ spAIk_ai/
 │   ├── utils.py                # 공통 유틸리티 함수 모음
 │   └── volume_detector.py      # 음량 이상 감지
 └── main.py                     # 메인 실행 파일
-
+```
 ⚙️ 설치 및 실행 방법
 1. 사전 준비
 Python 3.11 이상이 설치되어 있어야 합니다.
