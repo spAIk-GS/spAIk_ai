@@ -45,30 +45,30 @@ spAIk_ai/
 
 1. 사전 준비
 
-Python 3.11 이상이 설치되어 있어야 합니다.
+  Python 3.11 이상이 설치되어 있어야 합니다.
 
-ffmpeg가 시스템에 설치되어 있어야 합니다. (예: brew install ffmpeg 또는 공식 웹사이트 참고)
+  ffmpeg가 시스템에 설치되어 있어야 합니다. (예: brew install ffmpeg 또는 공식 웹사이트 참고)
 
 2. 환경 설정
-레포지토리를 클론합니다.
+  레포지토리를 클론합니다.
 ```
 git clone https://github.com/spAIk-GS/spAIk_ai.git
 cd spAIk_ai
 ```
-가상 환경을 생성하고 활성화합니다.
+  가상 환경을 생성하고 활성화합니다.
 ```
 python -m venv venv
 venv\Scripts\activate
 source venv/bin/activate
 ```
-필요한 라이브러리를 설치합니다.
+  필요한 라이브러리를 설치합니다.
 ```
 pip install -r requirements.txt
 ```
 
 
 3. 실행
-main.py 파일을 실행하여 분석을 시작합니다. 주의: main.py 파일의 input_video_path 변수 값을 분석할 영상 파일 경로로 변경해야 합니다.
+  main.py 파일을 실행하여 분석을 시작합니다. 주의: main.py 파일의 input_video_path 변수 값을 분석할 영상 파일 경로로 변경해야 합니다.
 ```
 python main.py
 ```
