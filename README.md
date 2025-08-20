@@ -22,9 +22,6 @@ spAIk는 사용자가 업로드한 영상 파일을 분석하여, 발표 및 면
 
 주요 라이브러리: librosa, ffmpeg, whisper, numpy, mediapipe, opencv-python, onnxruntime
 
-환경: dotenv (환경 변수 관리)
-
-
 📁 프로젝트 구조
 ```
 spAIk_ai/
