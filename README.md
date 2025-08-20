@@ -46,6 +46,7 @@ spAIk_ai/
 1. 사전 준비
 
 Python 3.11 이상이 설치되어 있어야 합니다.
+
 ffmpeg가 시스템에 설치되어 있어야 합니다. (예: brew install ffmpeg 또는 공식 웹사이트 참고)
 
 2. 환경 설정
