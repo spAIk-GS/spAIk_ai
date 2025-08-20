@@ -11,9 +11,7 @@ STT (Speech-to-Text): Whisper를 활용해 음성을 텍스트로 변환합니�
 
 말더듬 감지: 오디오의 낮은 에너지 레벨을 기준으로 멈칫거림이나 침묵 구간을 감지하여 횟수와 위치를 분석합니다.
 
-영상 분석:
-
-비언어적 요소 분석: MediaPipe, OpenCV, ONNX Runtime 기반의 Head-Pose-Estimation 모델을 활용하여 시선 유지 비율 및 제스처 점수를 평가합니다.
+영상 분석: 비언어적 요소 분석: MediaPipe, OpenCV, ONNX Runtime 기반의 Head-Pose-Estimation 모델을 활용하여 시선 유지 비율 및 제스처 점수를 평가합니다.
 
 피드백 생성: 분석된 모든 데이터를 기반으로 논리성, 명확성, 구성에 대한 종합적인 피드백을 제공합니다.
 
