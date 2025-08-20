@@ -18,7 +18,7 @@ spAIk는 사용자가 업로드한 영상 파일을 분석하여, 발표 및 면
 
 
 🛠️ 기술 스택
-언어: Python 3.11
+언어: Python 3.10.13
 
 주요 라이브러리: librosa, ffmpeg, whisper, numpy, mediapipe, opencv-python, onnxruntime
 
@@ -41,7 +41,7 @@ spAIk_ai/
 
 사전 준비
 
-Python 3.11 이상이 설치되어 있어야 합니다.
+Python 3.10.13 이 설치되어 있어야 합니다.
 
 ffmpeg가 시스템에 설치되어 있어야 합니다. (예: brew install ffmpeg 또는 공식 웹사이트 참고)
 
