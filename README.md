@@ -45,7 +45,8 @@ spAIk_ai/
 │
 ' ' ' ' ' '
 ' ' ' ' ' '
-└── unfied_app.py                     # 메인 실행 파일
+│   ├── mainVideo.py            # 비디오 분석 메인 실행 파일
+└── audiomain.py                # 오디오 분석 메인 실행 파일
 ```
 ### ⚙️ 설치 및 실행 방법
 
