@@ -74,7 +74,8 @@ pip install -r requirements.txt
 
 
 ##### 실행
- unfied_app.py 파일을 실행하여 분석을 시작합니다. 주의: main.py 파일의 input_video_path 변수 값을 분석할 영상 파일 경로로 변경해야 합니다.
+ 오디오 분석은 audiomain.py 파일을 실행하여 분석을 시작합니다. 주의: amain 함수의 video_path 인자 값을 분석할 파일 경로로 변경해야 합니다.
+ 비디오 분석은 mianVideo.py 파일을 실행하여 분석을 시작합니다. 
 ```
 python unfied_app.py
 ```
