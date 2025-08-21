@@ -165,6 +165,7 @@ def amain(video_path, analysis_id, presentation_id):
 # Call the main function when the script is executed directly
 if __name__ == "__main__":
     start_total = time.time()
-    input_video_path = "C:/Users/SUNWOO/Desktop/spAIk_audio_ai-main/sample_input/mi3nu.mp4"
-    amain(input_video_path, "1234", "12345")
+    input_video_path = str(input("주소를 입력하세요: "))
+    print(json.dumps(amain(input_video_path, "1234", "12345"), indent=2, ensure_ascii=False))
     print(f"\n총 소요 시간: {time.time() - start_total:.2f}초")
+
