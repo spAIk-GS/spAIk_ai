@@ -75,6 +75,7 @@ pip install -r requirements.txt
 
 ##### 실행
  오디오 분석은 audiomain.py 파일을 실행하여 분석을 시작합니다. 주의: amain 함수의 video_path 인자 값을 분석할 영상 경로로 변경해야 합니다.
+ 
  비디오 분석은 mianVideo.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
 ```
 python audiomain.py
