@@ -1,10 +1,10 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-from face_detection import FaceDetector
-from mark_detection import MarkDetector
-from pose_estimation import PoseEstimator
-from utils import refine
+from video_feedback.face_detection import FaceDetector
+from video_feedback.mark_detection import MarkDetector
+from video_feedback.pose_estimation import PoseEstimator
+from video_feedback.utils import refine
 import math
 from tqdm import tqdm
 import json
@@ -62,8 +62,8 @@ def run(video_path):
     if not fps or fps <= 0:
         fps = None  # POS_MSEC 기반으로만 초 계산
 
-    face_detector = FaceDetector("assets/face_detector.onnx")
-    mark_detector = MarkDetector("assets/face_landmarks.onnx")
+    face_detector = FaceDetector("video_feedback/assets/face_detector.onnx")
+    mark_detector = MarkDetector("video_feedback/assets/face_landmarks.onnx")
     pose_estimator = PoseEstimator(frame_width, frame_height)
 
     picked_frame = 0
@@ -255,7 +255,7 @@ def run(video_path):
         total_duration_sec = infer_total_duration_sec(cap, total_frames, fps, timeline)
         body_segments, gaze_segments = make_segments(timeline, SEGMENT_LEN, round(total_duration_sec, 1))
 
-        from videoFG import generate_posture_feedback
+        from video_feedback.videoFG import generate_posture_feedback
         gaze_level, gesture_level = generate_posture_feedback(head_down_ratio, arm_move_ratio)
 
         report = {
