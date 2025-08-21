@@ -27,7 +27,6 @@
 ```
 spAIk_ai/
 ├── audio_feedback/
-│   ├── ai_feedback.py          # Gemini API를 활용한 텍스트 피드백 생성
 │   ├── analyze_audio.py        # 음성 특징(피치, 속도 등) 분석
 │   ├── asr_whisper.py          # STT 변환
 │   ├── extract_audio.py        # 영상에서 오디오 추출
@@ -37,15 +36,15 @@ spAIk_ai/
 │   ├── utils.py                # 공통 유틸리티 함수 모음
 │   └── volume_detector.py      # 음량 이상 감지
 │
-├── video_feedback/
-│   ├── face_detection.py       # 얼굴 감지
-│   ├── mark_detection.py       # 얼굴 랜드마크 감지
-│   ├── pose_estimation.py      # 머리 자세 추정
-│   ├── videoFG.py              # 공통 유틸리티 함수 모음
-│
-' ' ' ' ' '
-' ' ' ' ' '
-│   ├── mainVideo.py            # 비디오 분석 메인 실행 파일
+├── video_feedback/               # 영상 관련 피드백 모듈
+│   ├── assets/                   # 얼굴 감지 모델 파일(.onnx 등)
+│   ├── face_detection.py         # 얼굴 감지 클래스
+│   ├── mark_detection.py         # 얼굴 랜드마크 감지 클래스
+│   ├── pose_estimation.py        # 머리 자세 추정 클래스
+│   ├── utils.py                  # 공통 유틸리티 함수 모음
+│   └── videoFG.py                # 평가 기준/추가 기능 모듈
+├── app.py                      # 서버 진입점
+├── videomain.py                # 비디오 분석 메인 실행 파일
 └── audiomain.py                # 오디오 분석 메인 실행 파일
 ```
 ### ⚙️ 설치 및 실행 방법
@@ -75,11 +74,11 @@ pip install -r requirements.txt
 
 
 ##### 실행
- 오디오 분석은 audiomain.py 파일을 실행하여 분석을 시작합니다. 주의: amain 함수의 video_path 인자 값을 분석할 영상 경로로 변경해야 합니다.
+ 오디오 분석은 audiomain.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
  
- 비디오 분석은 mianVideo.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
+ 비디오 분석은 videomain.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
 ```
 python audiomain.py
-python mainVideo.py
+python videomain.py
 ```
 
