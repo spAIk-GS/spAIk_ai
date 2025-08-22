@@ -82,3 +82,33 @@ python audiomain.py
 python videomain.py
 ```
 
+
+### 🚀 spAIk-ai 실행 가이드 (Docker)
+이 프로젝트는 Docker를 사용하여 컨테이너 환경에서 쉽게 실행할 수 있습니다. 아래 가이드에 따라 프로젝트를 빌드하고 실행하세요.
+
+#### 1. 사전 준비
+##### Docker Desktop 설치 및 실행: Docker 컨테이너를 관리하기 위한 필수 도구입니다.
+
+#### 2. 실행 명령어
+##### 아래 순서대로 명령어를 입력하여 프로젝트를 실행합니다.
+```
+Bash
+
+# 1. GitHub에서 프로젝트 클론
+git clone https://github.com/spAIk-GS/spAIk_ai.git
+
+# 2. 클론된 폴더로 이동
+cd spAIk_ai
+
+# 3. Docker 이미지 빌드
+# 이미지 이름은 소문자로 지정해야 합니다.
+docker build -t spaik_ai .
+
+# 4. Docker 컨테이너 실행
+# 애플리케이션은 5000번 포트에서 실행됩니다.
+docker run -p 5000:5000 spaik_ai
+```
+#### 3. 애플리케이션 접속
+##### 위 명령어를 실행하면 애플리케이션이 백그라운드에서 실행됩니다. 웹 브라우저를 열고 다음 주소로 접속하여 애플리케이션을 확인하세요.
+
+- http://localhost:5000
