@@ -35,13 +35,13 @@ def detect_stuttering(audio_path, frame_length=2048, hop_length=512, threshold=0
             start_time = librosa.frames_to_time(stutter_start_frame, sr=sr, hop_length=hop_length)
             end_time = librosa.frames_to_time(stutter_end_frame, sr=sr, hop_length=hop_length)
             
-            if end_time - start_time > 0.1:
+            if end_time - start_time > 1:
                 stuttering_timestamps.append({"start": start_time, "end": end_time})
 
     if in_stutter:
         start_time = librosa.frames_to_time(stutter_start_frame, sr=sr, hop_length=hop_length)
         end_time = librosa.get_duration(y=y, sr=sr)
-        if end_time - start_time > 0.1:
+        if end_time - start_time > 1:
             stuttering_timestamps.append({"start": start_time, "end": end_time})
     
     count = len(stuttering_timestamps)
