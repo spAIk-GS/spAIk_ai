@@ -283,8 +283,8 @@ def run(video_path):
 if __name__ == "__main__":
     video_path = str(input("주소를 입력하세요: "))
     with open("data.json", "w", encoding="utf-8") as f:
-        data = run(video_path)
         json.dump(data, f, ensure_ascii=False, indent=4)
-
-        print("data.json 저장 완료!")
+    jdata = json.dumps(data, ensure_ascii=False, indent=4)
+    print(jdata)
+    print("data.json 저장 완료!")
     print("비디오 분석이 완료되었습니다.")
