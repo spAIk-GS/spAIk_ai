@@ -10,7 +10,7 @@ import tempfile
 import json
 
 # 분석 모듈
-import mainVideo
+import videomain
 import audiomain
 
 app = Flask(__name__)
@@ -118,7 +118,7 @@ def process_analysis(s3_url: str, presentation_id: str, callback_url: str):
             return False
 
         try:
-            video_results = mainVideo.run(video_path)
+            video_results = videomain.run(video_path)
             set_status(video_analysis_id, "COMPLETED")
         except Exception as e:
             video_err = str(e)
