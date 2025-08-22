@@ -8,7 +8,7 @@ def generate_posture_feedback(head_down_ratio, arm_movement_ratio):
         gaze_level = "좋음"
 
     # 제스처 피드백
-    if arm_movement_ratio < 0.29:
+    if arm_movement_ratio < 0.32:
         gesture_level = "나쁨"
     elif arm_movement_ratio > 0.75:
         gesture_level = "좋음"
