@@ -81,7 +81,7 @@ pip install -r requirements.txt
 python audiomain.py
 python videomain.py
 ```
-
+----------------------
 
 ### 🚀 spAIk-ai 실행 가이드 (Docker)
 #### 이 프로젝트는 Docker를 사용하여 컨테이너 환경에서 쉽게 실행할 수 있습니다. 아래 가이드에 따라 프로젝트를 빌드하고 실행하세요.
