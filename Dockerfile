@@ -20,5 +20,4 @@ ENV PYTHONPATH=/app
 
 EXPOSE 5000
 
-CMD ["gunicorn", "-k", "uvicorn.workers.UvicornWorker", "app:app", "-b", "0.0.0.0:5000", "--workers", "2", "--timeout", "120"]
-
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000", "--workers", "2", "--timeout", "120"]
