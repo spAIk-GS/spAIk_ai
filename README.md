@@ -74,9 +74,9 @@ pip install -r requirements.txt
 
 
 ##### 3. 실행
- 오디오 분석은 audiomain.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
+ ##### 오디오 분석은 audiomain.py 파일 input_video_path 인자에 영상의 경로를 넣고 실행하여 분석을 시작합니다. 
  
- 비디오 분석은 videomain.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
+ ##### 비디오 분석은 videomain.py 파일을 실행하여 분석을 시작합니다. 파일을 실행하면 "주소를 입력하세요" 라는 문구가 나오고 그곳에 영상 경로를 입력하면 됩니다.
 ```
 python audiomain.py
 python videomain.py
