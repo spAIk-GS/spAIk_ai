@@ -45,7 +45,9 @@ spAIk_ai/
 │   └── videoFG.py                # 평가 기준/추가 기능 모듈
 ├── app.py                      # 서버 진입점
 ├── videomain.py                # 비디오 분석 메인 실행 파일
-└── audiomain.py                # 오디오 분석 메인 실행 파일
+├── audiomain.py                # 오디오 분석 메인 실행 파일
+├── .dockerignore               # Docker 빌드 제외 규칙
+└── Dockerfile                    # Docker 빌드 스크립트
 ```
 ### ⚙️ 설치 및 실행 방법
 
